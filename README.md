@@ -1,96 +1,116 @@
-# Credit Score Passport Application
+# Credit Score
 
-A premium, fast, and secure application to help informal workers build their financial credibility through mobile money transaction history.
+![Credit Score Logo](frontend/public/globe.svg)
 
-## Architecture
-
-- **Frontend:** Next.js 15 (App Router), Tailwind CSS 4, Chart.js
-- **Backend:** Supabase (PostgreSQL, Auth, Edge Functions, Row Level Security)
-- **UI Design:** Inspired by premium fintech products (like ClearScore) with glassmorphism, tailored ALU Blue colors, and smooth micro-animations.
+> **A premium, fast, and secure application empowering informal workers to build their financial credibility through mobile money transaction history.**
 
 ---
 
-## 🚀 Setup & Installation (Frontend)
+## Overview
 
-1. **Navigate to the frontend folder:**
-   ```bash
-   cd frontend
-   ```
+The **Credit Score** system is designed to solve a critical issue in developing markets: informal workers and small business owners lack traditional credit histories, making it impossible to access formal financing. By securely ingesting and analyzing their Mobile Money (MoMo) transaction data, this platform dynamically generates a **verified, FICO-style 1000-point Credit Score**. 
 
-2. **Install dependencies:**
-   *(If not already installed)*
-   ```bash
-   npm install
-   ```
+## Key Features
 
-3. **Environment Variables:**
-   Copy the example environment file:
-   ```bash
-   cp .env.example .env.local
-   ```
-   *Edit `.env.local` to include your Supabase URL and Anon Key.*
-
-4. **Run the local development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+- **Interactive 3D Landing Page:** A premium, glassmorphism-inspired landing page featuring a live 3D network sync globe.
+- **Dynamic FICO-Style Dashboard:** A comprehensive, dark-mode-first dashboard with an animated 1000-point credit score gauge, loan readiness indicators, and financial trend charts.
+- **MoMo Transaction Ingestion:** Users can manually add or bulk-upload CSV exports of their Mobile Money statements.
+- **Automated Credit Engine:** A Supabase Edge Function that analyzes income consistency, savings behavior, and transaction velocity to calculate real-time scores.
+- **AI Growth Recommendations:** Automated, personalized tips helping users improve their financial health.
+- **Native Support Ticketing:** Integrated with the **Resend API** to instantly route user support requests directly to the system administration team.
 
 ---
 
-## 🛠 Backend Setup (No Live Domain needed)
+## Architecture & Tech Stack
 
-If you are running the project locally and do not have a live domain for your Supabase backend, you can use the **Supabase CLI** to run the backend entirely on your local machine.
+This project is built on a cutting-edge, scalable tech stack:
 
-### Local Supabase Development
-
-1. **Install Supabase CLI:**
-   If you have npm installed, run:
-   ```bash
-   npm i -g supabase
-   ```
-
-2. **Initialize Local Backend:**
-   From the `backend` folder, run:
-   ```bash
-   cd backend
-   supabase init
-   ```
-
-3. **Start Supabase Locally:**
-   Ensure Docker is running on your machine, then execute:
-   ```bash
-   supabase start
-   ```
-   *This command will output your local `API URL` and `anon key`.*
-
-4. **Apply Migrations (Schema & Policies):**
-   The database schema and RLS policies are located in `backend/supabase/migrations/Credit_Schema.sql`.
-   Apply them locally with:
-   ```bash
-   supabase db reset
-   ```
-
-5. **Run Edge Functions Locally:**
-   To test the score calculation logic locally:
-   ```bash
-   supabase functions serve calculate-score --no-verify-jwt
-   ```
-
-6. **Connect Frontend to Local Backend:**
-   Update your `frontend/.env.local` with the local API URL and anon key output from `supabase start`:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_local_anon_key
-   ```
+- **Frontend Framework:** Next.js 16 (App Router) powered by Turbopack.
+- **Styling & UI:** Tailwind CSS v4, Base UI, Shadcn UI patterns, and Framer Motion for micro-animations.
+- **Backend & Database:** Supabase (PostgreSQL).
+- **Authentication:** Supabase Auth with Row Level Security (RLS) ensuring strict data privacy.
+- **Serverless Compute:** Supabase Edge Functions for isolated, secure scoring algorithms.
+- **Email Infrastructure:** Resend API for seamless transactional emails.
 
 ---
 
-## 📄 CSV Upload Format
+## Credit Scoring Algorithm
 
-For users bulk-uploading transactions via the dashboard, the CSV must have the exact column names below.
+The system calculates a user's score (from 0 to 1000) by analyzing their recent transaction history (last 90 days). The algorithm evaluates three core financial behaviors:
 
-**Example Format:**
+1. **Income Consistency (40% weight):**
+   - Evaluates the total volume of incoming transfers and income.
+   - Points are awarded incrementally as total income crosses specific thresholds (e.g., > 100, 500, 2000).
+2. **Savings Behavior (30% weight):**
+   - Measures the ratio of total savings deposits against total expenses.
+   - High savings relative to expenses yields maximum points in this category.
+3. **Transaction Activity (30% weight):**
+   - Calculates the frequency of interactions (total number of transactions).
+   - Consistent, frequent use of the account (e.g., > 10, > 25 transactions) demonstrates financial reliability.
+
+These weighted factors are combined to produce the final 1000-point score, which is then mapped to loan readiness tiers (Needs Work, Fair, Good, Excellent).
+
+---
+
+## Quick Start Guide
+
+### 1. Backend Setup (Supabase)
+
+If you are running the project locally, you can use the Supabase CLI to host the entire backend on your machine.
+
+```bash
+# Install Supabase CLI
+npm i -g supabase
+
+# Initialize and start local backend
+cd backend
+supabase init
+supabase start
+```
+*Note: Ensure Docker is running. The `supabase start` command will output your local API URL and anon key.*
+
+**Apply Migrations & Edge Functions:**
+```bash
+# Apply database schema and RLS policies
+supabase db reset
+
+# Serve the credit scoring edge function locally
+supabase functions serve calculate-score --no-verify-jwt
+```
+
+### 2. Frontend Setup
+
+Open a new terminal window and navigate to the frontend directory:
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env.local
+```
+
+Edit your `.env.local` to include your Supabase keys (from step 1) and your Resend API key:
+```env
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_local_anon_key
+RESEND_API_KEY=re_your_resend_api_key
+```
+
+**Start the development server:**
+```bash
+npm run dev
+```
+Your application will now be running on [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Transaction CSV Upload Format
+
+To test the bulk-upload feature on the dashboard, ensure your CSV matches the exact format below:
+
 ```csv
 transaction_date,amount_ghs,type,source,description
 2026-01-05,500.00,income,mobile_money,Weekly market sales
@@ -105,15 +125,8 @@ transaction_date,amount_ghs,type,source,description
 
 ---
 
-## 🧪 Testing the Application
+## Security & Privacy
 
-1. **Registration:** Create a test user via the `/register` page.
-2. **Dashboard:** You will initially see a "No Score Yet" state.
-3. **Adding Data:** 
-   - Navigate to **Transactions**.
-   - Use the CSV bulk uploader to insert at least 10 valid transactions (ensure dates span the last 90 days).
-4. **Scoring:** 
-   - Go to **My Score**.
-   - Click "Calculate My Score" to invoke the Edge Function.
-   - Navigate back to the Dashboard to see your premium gauge, loan readiness, and score trend chart.
-5. **Growth Tips:** Check the **Recommendations** page to see actionable advice generated by the scoring algorithm.
+- All user data is secured using Postgres Row Level Security (RLS). Users can only read and write their own transaction data.
+- Edge functions are isolated and executed securely to prevent score manipulation.
+- Authentication sessions are managed securely via Supabase JWTs.

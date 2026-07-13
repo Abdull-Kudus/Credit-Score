@@ -10,7 +10,7 @@ export default function SessionProvider({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT" || event === "USER_DELETED") {
+      if (event === "SIGNED_OUT") {
         router.push("/login")
       } else if (event === "TOKEN_REFRESHED") {
         console.log("Session token refreshed automatically.")

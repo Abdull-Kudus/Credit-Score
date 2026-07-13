@@ -41,7 +41,7 @@ const defaultBlocks: Block[] = [
   { id: "account-cards", label: "Account Cards", size: "sm", component: <AccountCards /> },
   { id: "transfer-spending", label: "Transfer & Spending", size: "sm", component: <div className="flex flex-col gap-4 [&>*]:flex-1"><QuickTransfer /><SpendingLimit /></div> },
   { id: "money-movement", label: "Money Movement", size: "sm", component: <MoneyMovement /> },
-  { id: "health-score", label: "Financial Health", size: "sm", component: <HealthScore /> },
+  { id: "health-score", label: "Financial Health", size: "sm", component: <HealthScore overall={0} trend="up" trendDelta={0} factors={[]} /> },
   { id: "recent-transactions", label: "Recent Transactions", size: "full", component: <RecentTransactions /> },
 ]
 

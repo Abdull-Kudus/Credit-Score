@@ -42,7 +42,7 @@ export default function ScoreTrendChart({ data }: Props) {
         backgroundColor: '#1B3A6B',
         padding: 12,
         titleFont: { family: 'Inter', size: 13 },
-        bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+        bodyFont: { family: 'Inter', size: 14, weight: 'bold' as const },
         displayColors: false,
         cornerRadius: 8,
       }

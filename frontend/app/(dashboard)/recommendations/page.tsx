@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
+import Link from "next/link"
 import RecommendationCard from "@/components/recommendations/RecommendationCard"
 import {
   Card,
@@ -39,8 +40,8 @@ export default async function RecommendationsPage() {
             <p className="text-muted-foreground max-w-md mx-auto mb-8">
               No active recommendations at the moment. Calculate your score to get fresh, personalised tips based on your latest transactions.
             </p>
-            <Button size="lg" asChild>
-              <a href="/score">Calculate Score</a>
+            <Button size="lg" render={<Link href="/score" />} nativeButton={false}>
+              Calculate Score
             </Button>
           </CardContent>
         </Card>

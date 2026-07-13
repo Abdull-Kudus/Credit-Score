@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { HealthScore, type HealthFactor } from "@/components/dashboard/health-score"
 import LoanReadinessBar from "@/components/dashboard/LoanReadinessBar"
@@ -138,11 +139,9 @@ export default async function DashboardPage() {
               Upload your mobile money statements to generate your Credit Passport Score.
               You currently have <span className="font-semibold text-foreground">{transactionCount ?? 0}</span> transaction(s) recorded.
             </p>
-            <Button size="lg" asChild className="gap-2">
-              <a href="/transactions">
-                <UploadCloudIcon className="size-4" />
-                Upload Statements
-              </a>
+            <Button size="lg" render={<Link href="/transactions" />} nativeButton={false} className="gap-2">
+              <UploadCloudIcon className="size-4" />
+              Upload Statements
             </Button>
           </CardContent>
         </Card>
