@@ -85,7 +85,7 @@ export function CommandPalette() {
               { label: "Settings", icon: SettingsIcon, href: "/settings" },
               { label: "Notifications", icon: BellIcon, href: "/notifications" },
               { label: "Help & Support", icon: LifeBuoyIcon, href: "/support" },
-              { label: "Sign In", icon: LogInIcon, href: "/sign-in" },
+              { label: "Sign In", icon: LogInIcon, href: "/login" },
               { label: "Sign Up", icon: UserPlusIcon, href: "/sign-up" },
             ].map((page) => (
               <CommandItem key={page.href} onSelect={() => run(() => router.push(page.href))}>

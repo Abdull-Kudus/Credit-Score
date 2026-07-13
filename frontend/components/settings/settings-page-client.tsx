@@ -77,7 +77,7 @@ function ProfileTab() {
       <CardContent className="space-y-6">
         <div className="flex items-center gap-4">
           <Avatar className="size-16">
-            <AvatarImage src="/avatars/user.jpg" alt="User avatar" />
+            <AvatarImage src="" alt="User avatar" />
             <AvatarFallback className="text-lg">AG</AvatarFallback>
           </Avatar>
           <div>
