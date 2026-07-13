@@ -95,7 +95,9 @@ cp .env.example .env.local
 Edit your `.env.local` to include your Supabase keys (from step 1) and your Resend API key:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_local_anon_key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_local_supabase_key
+NEXT_PUBLIC_APP_NAME="Credit Score"
+SUPABASE_ACCESS_TOKEN=your_access_token
 RESEND_API_KEY=re_your_resend_api_key
 ```
 
