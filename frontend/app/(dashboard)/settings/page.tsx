@@ -36,10 +36,14 @@ export default async function SettingsPage() {
 
         <CardContent className="p-8">
           <div className="flex items-center gap-6 mb-8 relative z-10">
-            <div className="size-20 bg-primary rounded-full flex items-center justify-center shadow-md border-4 border-background">
-              <span className="text-primary-foreground text-3xl font-bold">
-                {user?.full_name?.charAt(0).toUpperCase() || "U"}
-              </span>
+            <div className="size-20 bg-primary rounded-full flex items-center justify-center shadow-md border-4 border-background overflow-hidden">
+              {session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture ? (
+                <img src={session.user.user_metadata.avatar_url || session.user.user_metadata.picture} alt="Profile" className="size-full object-cover" />
+              ) : (
+                <span className="text-primary-foreground text-3xl font-bold">
+                  {user?.full_name?.charAt(0).toUpperCase() || "U"}
+                </span>
+              )}
             </div>
             <div>
               <p className="font-semibold text-foreground text-2xl tracking-tight">{user?.full_name}</p>

@@ -21,7 +21,7 @@ export default async function DashboardLayout({
   let userProfile = {
     name: "User",
     email: session?.user?.email || "",
-    avatar: "",
+    avatar: session?.user?.user_metadata?.avatar_url || session?.user?.user_metadata?.picture || "",
   }
 
   if (session) {
