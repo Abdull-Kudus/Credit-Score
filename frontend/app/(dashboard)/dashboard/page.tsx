@@ -4,6 +4,8 @@ import { redirect } from "next/navigation"
 import { HealthScore, type HealthFactor } from "@/components/dashboard/health-score"
 import LoanReadinessBar from "@/components/dashboard/LoanReadinessBar"
 import ScoreTrendChart from "@/components/dashboard/ScoreTrendChart"
+import { FinancialOverview } from "@/components/dashboard/financial-overview"
+import { SpendingLimit } from "@/components/dashboard/spending-limit"
 import {
   Card,
   CardContent,
@@ -63,10 +65,46 @@ export default async function DashboardPage() {
     .order("calculated_at", { ascending: true })
     .limit(10)
 
-  const { count: transactionCount } = await supabase
+  const { count: transactionCount, data: transactions } = await supabase
     .from("momo_transactions")
-    .select("id", { count: "exact", head: true })
+    .select("*", { count: "exact" })
     .eq("user_id", session.user.id)
+    .order("transaction_date", { ascending: true })
+
+  let financialData: { month: string; currentYear: number; lastYear: number }[] = []
+  let monthlySpent = 0;
+  const budget = 2000; // Configured static budget
+  const now = new Date()
+  const periodStart = new Date(now.getFullYear(), now.getMonth(), 1).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+  const periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+
+  if (transactions && transactions.length > 0) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const currentYear = now.getFullYear()
+    
+    const monthlyAgg = monthNames.map(month => ({ month, currentYear: 0, lastYear: 0 }))
+    
+    transactions.forEach(t => {
+      const date = new Date(t.transaction_date)
+      const mIdx = date.getMonth()
+      const y = date.getFullYear()
+      
+      const type = t.transaction_type.toUpperCase()
+      const isExpense = type.includes("PAYMENT") || type === "DEBIT" || type === "EXPENSE" || type === "BILL_PAYMENT" || (t.balance_after < t.balance_before)
+      
+      if (isExpense) {
+        if (y === currentYear) {
+          monthlyAgg[mIdx].currentYear += Number(t.amount)
+          if (mIdx === now.getMonth()) {
+            monthlySpent += Number(t.amount)
+          }
+        } else if (y === currentYear - 1) {
+          monthlyAgg[mIdx].lastYear += Number(t.amount)
+        }
+      }
+    })
+    financialData = monthlyAgg
+  }
 
   let healthFactors: HealthFactor[] = []
   let overallScore = 0
@@ -156,11 +194,24 @@ export default async function DashboardPage() {
               trendDelta={trendDelta} 
               factors={healthFactors} 
             />
+            {transactions && transactions.length > 0 && (
+              <SpendingLimit 
+                spent={monthlySpent} 
+                budget={budget} 
+                periodStart={periodStart} 
+                periodEnd={periodEnd} 
+              />
+            )}
           </div>
 
           {/* Right Column: Trend & Readiness */}
           <div className="md:col-span-8 flex flex-col gap-6">
             
+            {/* Financial Overview */}
+            {financialData.length > 0 && (
+              <FinancialOverview data={financialData} />
+            )}
+
             {/* Score Trend Card */}
             {scoreHistory && scoreHistory.length > 0 && (
               <Card>

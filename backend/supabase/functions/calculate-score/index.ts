@@ -196,11 +196,29 @@ function groupByWeek(transactions: any[]): Record<string, any[]> {
 }
 
 async function generateRecommendations(supabase: any, userId: string, factors: Record<string, number>) {
-  await supabase.from("recommendations").delete().eq("user_id", userId).eq("is_completed", false)
+  const { data: existingRecs } = await supabase
+    .from("recommendations")
+    .select("factor")
+    .eq("user_id", userId)
+    .eq("is_completed", false)
+
+  const existingFactors = existingRecs ? existingRecs.map((r: any) => r.factor) : []
+
+  const factorsToKeep = Object.keys(factors).filter(k => factors[k] < 60)
+  const factorsToDelete = existingFactors.filter((f: string) => !factorsToKeep.includes(f))
+
+  if (factorsToDelete.length > 0) {
+    await supabase
+      .from("recommendations")
+      .delete()
+      .eq("user_id", userId)
+      .eq("is_completed", false)
+      .in("factor", factorsToDelete)
+  }
 
   const recommendations = []
 
-  if (factors.income < 60) {
+  if (factors.income < 60 && !existingFactors.includes("income")) {
     recommendations.push({
       user_id: userId,
       factor: "income",
@@ -210,7 +228,7 @@ async function generateRecommendations(supabase: any, userId: string, factors: R
     })
   }
 
-  if (factors.savings < 60) {
+  if (factors.savings < 60 && !existingFactors.includes("savings")) {
     recommendations.push({
       user_id: userId,
       factor: "savings",
@@ -220,7 +238,7 @@ async function generateRecommendations(supabase: any, userId: string, factors: R
     })
   }
 
-  if (factors.payments < 60) {
+  if (factors.payments < 60 && !existingFactors.includes("payments")) {
     recommendations.push({
       user_id: userId,
       factor: "payments",
@@ -230,7 +248,7 @@ async function generateRecommendations(supabase: any, userId: string, factors: R
     })
   }
 
-  if (factors.frequency < 60) {
+  if (factors.frequency < 60 && !existingFactors.includes("frequency")) {
     recommendations.push({
       user_id: userId,
       factor: "frequency",

@@ -5,13 +5,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { spendingLimit } from "@/data/seed"
 import { ShieldCheckIcon } from "lucide-react"
 
-export function SpendingLimit() {
-  const percentUsed = Math.round(
-    (spendingLimit.spent / spendingLimit.budget) * 100
-  )
+export function SpendingLimit({ spent, budget, periodStart, periodEnd }: { spent: number; budget: number; periodStart: string; periodEnd: string }) {
+  const percentUsed = Math.min(Math.round((spent / budget) * 100), 100)
+  const remaining = Math.max(budget - spent, 0)
 
   return (
     <Card>
@@ -27,9 +25,9 @@ export function SpendingLimit() {
         <div>
           <p className="text-xs text-muted-foreground">Budget</p>
           <p className="text-2xl font-bold tabular-nums tracking-tight">
-            ${spendingLimit.budget.toLocaleString()}{" "}
+            GHS {budget.toLocaleString()}{" "}
             <span className="text-sm font-normal text-muted-foreground">
-              {spendingLimit.currency}
+              GHS
             </span>
           </p>
         </div>
@@ -40,19 +38,19 @@ export function SpendingLimit() {
           <div>
             <p className="text-xs text-muted-foreground">Spend</p>
             <p className="font-semibold tabular-nums">
-              ${spendingLimit.spent.toLocaleString()}
+              GHS {spent.toLocaleString()}
             </p>
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Remaining</p>
             <p className="font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-              ${spendingLimit.remaining.toLocaleString()}
+              GHS {remaining.toLocaleString()}
             </p>
           </div>
         </div>
 
         <p className="text-xs text-muted-foreground">
-          {spendingLimit.periodStart} - {spendingLimit.periodEnd}
+          {periodStart} - {periodEnd}
         </p>
       </CardContent>
     </Card>

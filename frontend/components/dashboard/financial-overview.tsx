@@ -22,7 +22,6 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, type DotProps } from "recharts"
-import { financialOverview } from "@/data/seed"
 import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { DateRange } from "react-day-picker"
@@ -59,14 +58,16 @@ const monthIndex: Record<string, number> = {
   Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
 }
 
-export function FinancialOverview() {
+export type FinancialData = { month: string; currentYear: number; lastYear: number }[]
+
+export function FinancialOverview({ data }: { data: FinancialData }) {
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2026, 0, 1),
     to: new Date(2026, 11, 31),
   })
 
   const filteredData = useMemo(() => {
-    if (!date?.from || !date?.to) return financialOverview
+    if (!date?.from || !date?.to) return data
     let fromMonth = date.from.getMonth()
     let toMonth = date.to.getMonth()
     // Ensure at least 3 months are shown for readability
@@ -74,11 +75,11 @@ export function FinancialOverview() {
       fromMonth = Math.max(0, fromMonth - 1)
       toMonth = Math.min(11, toMonth + 1)
     }
-    return financialOverview.filter((d) => {
+    return data.filter((d) => {
       const m = monthIndex[d.month]
       return m >= fromMonth && m <= toMonth
     })
-  }, [date])
+  }, [date, data])
 
   const totals = useMemo(() => {
     const current = filteredData.reduce((s, d) => s + d.currentYear, 0)
@@ -98,14 +99,14 @@ export function FinancialOverview() {
               <span className="size-2 rounded-full bg-primary" />
               Current Year{" "}
               <span className="font-medium text-foreground">
-                ${totals.current.toLocaleString()}
+                GHS {totals.current.toLocaleString()}
               </span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2 rounded-full bg-muted-foreground/40" />
               Last Year{" "}
               <span className="font-medium text-foreground">
-                ${totals.last.toLocaleString()}
+                GHS {totals.last.toLocaleString()}
               </span>
             </span>
           </div>
@@ -186,14 +187,14 @@ export function FinancialOverview() {
               fontSize={12}
               tickMargin={8}
               stroke="var(--color-muted-foreground)"
-              tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+              tickFormatter={(v) => `GHS ${(v / 1000).toFixed(0)}k`}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   labelFormatter={(label) => label}
                   formatter={(value) =>
-                    `$${Number(value).toLocaleString()}`
+                    `GHS ${Number(value).toLocaleString()}`
                   }
                 />
               }

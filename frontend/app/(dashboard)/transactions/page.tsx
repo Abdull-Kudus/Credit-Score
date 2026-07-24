@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import TransactionForm from "@/components/transactions/TransactionForm"
 import TransactionList from "@/components/transactions/TransactionList"
 import CSVUpload from "@/components/transactions/CSVUpload"
 import {
@@ -37,18 +36,6 @@ export default async function TransactionsPage() {
         
         {/* Left Column: Forms */}
         <div className="md:col-span-5 flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <PlusIcon className="size-5 text-primary" />
-                Add Manual Entry
-              </CardTitle>
-              <CardDescription>Manually record a single transaction</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <TransactionForm userId={session.user.id} />
-            </CardContent>
-          </Card>
 
           <Card>
             <CardHeader>

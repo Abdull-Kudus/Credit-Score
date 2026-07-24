@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import DeleteAccountButton from "@/components/profile/DeleteAccountButton"
+import ProfileUpdateForm from "@/components/profile/ProfileUpdateForm"
 import {
   Card,
   CardContent,
@@ -52,16 +53,19 @@ export default async function SettingsPage() {
           </div>
 
           <div className="flex flex-col gap-3 relative z-10">
-            {[
-              { label: "Phone Number", value: user?.phone_number },
-              { label: "Occupation", value: user?.occupation_type?.replace("_", " ") },
-              { label: "Member Since", value: user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GH", { month: "long", year: "numeric" }) : "Not provided" },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between items-center p-4 rounded-xl bg-secondary/50 border border-border/50">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</span>
-                <span className="text-sm font-medium text-foreground capitalize">{value || "Not provided"}</span>
-              </div>
-            ))}
+            <ProfileUpdateForm user={user} />
+            <div className="flex justify-between items-center p-4 rounded-xl bg-secondary/50 border border-border/50 mt-4">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Member Since</span>
+              <span className="text-sm font-medium text-foreground capitalize">
+                {user?.created_at ? new Date(user.created_at).toLocaleDateString("en-GH", { month: "long", year: "numeric" }) : "Not provided"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center p-4 rounded-xl bg-secondary/50 border border-border/50">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Occupation</span>
+              <span className="text-sm font-medium text-foreground capitalize">
+                {user?.occupation_type?.replace("_", " ") || "Not provided"}
+              </span>
+            </div>
           </div>
           
           <Separator className="my-8" />

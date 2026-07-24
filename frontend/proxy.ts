@@ -6,14 +6,16 @@ export async function proxy(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  const protectedRoutes = ["/dashboard", "/transactions", "/score", "/recommendations", "/profile"]
+  const protectedRoutes = ["/dashboard", "/transactions", "/score", "/recommendations", "/profile", "/settings"]
   const authRoutes = ["/login", "/register"]
   const path = request.nextUrl.pathname
 
+  // Redirect to login if accessing a protected route without a session
   if (!session && protectedRoutes.some(r => path.startsWith(r))) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
 
+  // Redirect to dashboard if accessing login/register while already authenticated
   if (session && authRoutes.some(r => path.startsWith(r))) {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
