@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import TransactionList from "@/components/transactions/TransactionList"
 import CSVUpload from "@/components/transactions/CSVUpload"
+import { ExportReportButton } from "@/components/dashboard/export-report-button"
 import {
   Card,
   CardContent,
@@ -25,11 +26,19 @@ export default async function TransactionsPage() {
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
-        <p className="text-muted-foreground">
-          Add your mobile money activity to build your credit score.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
+          <p className="text-muted-foreground">
+            Add your mobile money activity to build your credit score.
+          </p>
+        </div>
+        {transactions && transactions.length > 0 && (
+          <ExportReportButton
+            transactions={transactions}
+            label="Export Transactions (CSV)"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-4">
