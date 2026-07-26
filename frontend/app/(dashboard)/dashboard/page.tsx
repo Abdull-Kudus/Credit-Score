@@ -6,6 +6,7 @@ import LoanReadinessBar from "@/components/dashboard/LoanReadinessBar"
 import ScoreTrendChart from "@/components/dashboard/ScoreTrendChart"
 import { FinancialOverview } from "@/components/dashboard/financial-overview"
 import { SpendingLimit } from "@/components/dashboard/spending-limit"
+import { ExportReportButton } from "@/components/dashboard/export-report-button"
 import {
   Card,
   CardContent,
@@ -157,13 +158,23 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {userProfile?.full_name?.split(" ")[0]}
-        </h1>
-        <p className="text-muted-foreground">
-          Here is an overview of your Credit Passport and financial readiness.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Welcome back, {userProfile?.full_name?.split(" ")[0]}
+          </h1>
+          <p className="text-muted-foreground">
+            Here is an overview of your Credit Passport and financial readiness.
+          </p>
+        </div>
+        {latestScore && (
+          <ExportReportButton
+            userProfile={userProfile}
+            latestScore={latestScore}
+            scoreHistory={scoreHistory || []}
+            transactions={transactions || []}
+          />
+        )}
       </div>
 
       {!latestScore ? (
