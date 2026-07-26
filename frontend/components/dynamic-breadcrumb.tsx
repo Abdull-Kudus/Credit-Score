@@ -13,18 +13,13 @@ import {
 
 const labelMap: Record<string, string> = {
   dashboard: "Dashboard",
-  accounts: "Accounts",
   transactions: "Transactions",
-  transfers: "Transfers",
-  cards: "Cards",
-  crypto: "Crypto",
-  analytics: "Analytics",
-  investments: "Investments",
-  budgets: "Budgets",
+  score: "Credit Score",
+  recommendations: "Recommendations",
   settings: "Settings",
-  notifications: "Notifications",
-  "sign-in": "Sign In",
-  "sign-up": "Sign Up",
+  support: "Help & Support",
+  login: "Sign In",
+  register: "Sign Up",
 }
 
 export function DynamicBreadcrumb() {
