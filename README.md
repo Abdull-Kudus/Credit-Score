@@ -1,7 +1,5 @@
 # Credit Score
 
-![Credit Score Logo](frontend/public/globe.svg)
-
 **Credit Score** is a platform designed to help informal workers and small business owners build their financial credibility. By analyzing Mobile Money (MoMo) transactions, the platform generates a verified credit score, giving users the ability to access formal financing and loans without a traditional credit history.
 
 ---
