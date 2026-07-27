@@ -4,59 +4,110 @@
 
 ---
 
-## Live Demo & Testing
+## Live Demo & Access
 
-You can access and test the live application immediately without any local installation:
+You can access and test the live application from here:
 **Live Application:** [https://credit-score-4a1w-wheat.vercel.app/](https://credit-score-4a1w-wheat.vercel.app/)
 
-### Instructions for Facilitators & Evaluators
-To test the platform on your end (either via the live link above or a local clone):
-1. **Request/Download a Statement:** Obtain a Mobile Money statement file. Notice there is **no manual keying in of transaction data required**—the application parses the document directly.
-2. **Supported Format:** The platform currently supports **Ghana Mobile Money (GH MoMo)** statements.
-3. **Upload & Test:** Upload the statement file into the application to witness the automated analysis, financial breakdown, and 1000-point credit score generation in real time.
+---
+
+## Step-by-Step Testing Flow (Live & Local)
+
+Whether you are testing via the **Live Demo** link above or running the application **Locally**, follow this exact step-by-step workflow to experience the platform:
+
+1. **Access the Platform:**
+   - Open the live link [https://credit-score-4a1w-wheat.vercel.app/](https://credit-score-4a1w-wheat.vercel.app/) (or visit `http://localhost:3000` if running locally).
+2. **Get Started & Authenticate:**
+   - Click on the **"Get Started"** button on the homepage.
+   - Sign up or log in by selecting **"Continue with Google"** (or using your email credentials).
+3. **Navigate to Transactions:**
+   - From the navigation menu, click on **Transactions**.
+4. **Upload MoMo Statement:**
+   - Click on the upload button and select your **Ghana Mobile Money (GH MoMo)** statement file.
+   - *Note:* There is **no manual keying in of transaction data required**—the application automatically parses and extracts all relevant financial data directly from the document.
+5. **View Overview & Credit Score:**
+   - Navigate to the **Overview** dashboard.
+   - See your detailed transaction breakdown, income consistency analysis, savings habits, and your dynamically generated **1000-point credit score** in real time!
 
 ---
 
 ## How It Works
 
-1. **Upload Statement:** Instead of manual data entry, users directly upload their Mobile Money statement files (currently supporting **Ghana MoMo** statements).
-2. **Get Scored:** The system automatically analyzes income consistency, savings, and transaction activity to generate a 1000-point credit score.
-3. **Track Progress:** Users receive actionable tips and a dynamic dashboard to understand their financial health and loan readiness.
+1. **Upload Statement:** Instead of tedious manual data entry, users directly upload their Mobile Money statement files (supporting **Ghana MoMo** statements).
+2. **Automated Analysis & Scoring:** The system automatically analyzes income consistency, transaction activity, and savings patterns to generate a reliable 1000-point credit score.
+3. **Actionable Financial Insights:** Users receive personalized, actionable tips and a dynamic overview dashboard to understand their financial health and unlock loan readiness.
 
 ---
 
 ## How to Run the Project Locally
 
-If you are cloning the repository and wish to run the backend and frontend locally on your machine, follow these steps:
+The application is powered by a **Next.js frontend** connected to a **Supabase cloud backend**.
+
+> [!NOTE]
+> **No Docker installation is required** to run this application locally! Because the project uses a hosted Supabase instance for its database and authentication, the entire application runs directly from the frontend directory.
+
+Follow every single step below to get the project running on your local machine:
 
 ### 1. Prerequisites
-- [Node.js](https://nodejs.org/) installed
-- [Docker](https://www.docker.com/) (needed for the local Supabase backend database and edge functions)
-- [Supabase CLI](https://supabase.com/docs/guides/cli) installed (`npm i -g supabase`)
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- `npm` (bundled with Node.js)
+- [Git](https://git-scm.com/) installed
 
-### 2. Start the Backend
-Open a terminal and start the local database and backend services:
+### 2. Clone the Repository
+Open your terminal and clone the project repository to your local machine:
 ```bash
-cd backend
-supabase start
-supabase db reset
-supabase functions serve calculate-score --no-verify-jwt
+git clone https://github.com/Abdull-Kudus/Credit-Score.git
+cd Credit-Score
 ```
-*(Keep this terminal running)*
 
 ### 3. Setup the Frontend Environment
-Open a **new** terminal window and prepare your environment variables:
+The application is run from the `frontend` directory where the UI and Supabase client integration reside:
 ```bash
 cd frontend
+```
+
+Create your local environment file by copying the example file:
+```bash
 cp .env.example .env
 ```
-Open the newly created `.env` file and fill in the required keys (you will get these when you run `supabase start`).
 
-### 4. Start the Application
-Install dependencies and run the frontend:
+Open the `.env` file in your code editor and configure your Supabase environment variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL="https://your-supabase-url.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="your-supabase-publishable-key"
+```
+*(Note: If you have existing project keys in your `.env` file, ensure they match your active Supabase instance).*
+
+### 4. Install Dependencies & Start the Development Server
+With your terminal still inside the `frontend` directory, install all required packages and start the development server:
 ```bash
 npm install
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) in your browser to test the application locally!
+### 5. Open in Your Browser
+Once the server starts, open your browser and navigate to:
+**[http://localhost:3000](http://localhost:3000)**
+
+You are now ready to follow the **Step-by-Step Testing Flow** outlined above!
+
+---
+
+## Backend Environment & Management (Optional)
+
+While the application runs directly from the `frontend` folder using Supabase's cloud backend, a `backend/` directory is also provided for repository administration, database migrations, and edge functions management using the Supabase CLI.
+
+If you need to administer database schemas or deploy backend edge functions:
+1. Navigate to the backend directory:
+   ```bash
+   cd ../backend
+   ```
+2. Create an environment file from the example:
+   ```bash
+   cp .env.example .env
+   ```
+3. Add your personal Supabase access token for CLI operations:
+   ```env
+   SUPABASE_ACCESS_TOKEN="your_supabase_personal_access_token"
+   ```
+4. Use the [Supabase CLI](https://supabase.com/docs/guides/cli) (`npm i -g supabase`) to push migrations or serve functions if you are developing or testing new backend features.
